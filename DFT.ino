@@ -61,27 +61,30 @@ double short_InputSignal_1kHz_15Hz [88]=
 +0.0000000000f, -0.5924659585f, +0.0947343455f, -0.1913417162f, -1.0000000000f, -0.4174197128f, -0.3535533906f, -1.2552931065f, 
 -0.8660254038f, -0.4619397663f, -1.3194792169f, -1.1827865776f, -0.5000000000f, -1.1827865776f, -1.3194792169f, -0.4619397663f,
 };
+//test input signal
+ uint16_t input[] = {773, 702, 515, 389, 370, 447, 554, 601, 561, 492, 455, 458, 480, 497, 545, 724, 801, 651, 460, 370, 396, 494, 579, 570, 507, 450, 433, 449, 480, 499, 500, 591, 756, 736, 548, 396, 356, 416, 522, 577, 549, 479, 436, 430, 455, 485, 502, 504, 496, 570, 737, 731, 540, 391, 362, 436, 539, 580, 543, 471, 428, 427, 450, 473, 486, 492, 485, 471, 486, 635, 748, 639, 455, 354, 363, 461, 560, 577, 518, 463, 443, 458, 482, 503, 521, 515, 499, 585, 735, 710, 536, 402, 368, 422, 520, 584, 551, 487, 444, 433, 448, 478, 496, 502, 505, 595, 753, 695, 514, 383, 366, 433, 529, 584, 562, 498, 447, 437, 454, 479, 494, 500, 530, 681, 752, 622, 450, 366, 384, 468, 557, 584, 534, 469, 435, 438, 464, 495, 517, 526, 634, 777, 730, 544, 402, 366, 424, 528, 602, 574, 499, 450, 440, 457, 481, 500, 520, 658, 781, 678, 485, 374, 374, 447, 547, 599, 563, 491, 442, 439, 459, 480, 495, 567, 742, 768, 599, 421, 350, 377, 481, 574, 590, 528, 458, 430, 438, 464, 488, 510, 640, 776, 689, 502, 379, 363, 437, 546, 605, 581, 507, 452, 438, 455, 478, 504, 633, 790, 740, 541, 390, 356, 418, 520, 588, 573, 506, 450, 430, 444, 472, 581, 770, 764, 558, 383, 327, 377, 477, 564, 573, 514, 452, 425, 428, 449, 556, 752, 762, 575, 398, 337, 385, 496, 595, 590, 522, 460, 440, 451, 484, 650, 810, 723, 521, 389};
+ const int samples = 128;
 
 //testing dtf on short signal
 //two arrays to process real and imaginary components of signals, halflength of short array each
-double realcomp[44];
-double imgcomp[44];
+uint16_t realcomp[samples/2];
+uint16_t imgcomp[samples/2];
 
 
 void setup() {
   Serial.begin(9600);
   //start method at arrays start
-  calc_sig_dft(&short_InputSignal_1kHz_15Hz[0],&realcomp[0], &imgcomp[0], 88);
+  calc_sig_dft(&input[0],&realcomp[0], &imgcomp[0], samples);
   get_dft_output_mag();
 
- plot_output(realcomp,44);
+ plot_output(realcomp,samples/2);
 }
 
 //empty
 void loop() {}
 
 //method converts time domain signals to frequency domain
-void calc_sig_dft(double *in_array, double *out_real, double *out_img, uint32_t array_length)
+void calc_sig_dft(uint16_t *in_array, uint16_t *out_real, uint16_t *out_img, uint32_t array_length)
 {
   int i,k,j;
 
@@ -114,7 +117,7 @@ void get_dft_output_mag(void)
 }
 
 
-void plot_output(double *in_array, uint32_t array_length)
+void plot_output(uint16_t *in_array, uint32_t array_length)
 {
    for(int i=0;i<array_length;i++){
   Serial.println(in_array[i]);
